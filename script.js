@@ -63,37 +63,80 @@ if (heroVisual) {
   });
 }
 
-// ─── CUSTOM CURSOR ───────────────────────────────────────
-const cursorDot  = document.getElementById("cursorDot");
-const cursorRing = document.getElementById("cursorRing");
 
-let dotX = 0, dotY = 0;
-let ringX = 0, ringY = 0;
+// ── PIXEL HAND CURSOR ────────────────────────────
+(function () {
+  const cur = document.getElementById("pxCursor");
+  if (!cur) return;
 
-// Dot follows instantly
-document.addEventListener("mousemove", (e) => {
-  dotX = e.clientX;
-  dotY = e.clientY;
-  cursorDot.style.left = dotX + "px";
-  cursorDot.style.top  = dotY + "px";
-});
+  // Pixel hand SVG — 3D style matching the reference
+  cur.innerHTML = `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+    <!-- shadow/depth layers (dark) -->
+    <rect x="3" y="28" width="3" height="2" fill="#1a1a1a"/>
+    <rect x="6" y="27" width="2" height="2" fill="#1a1a1a"/>
+    <rect x="8" y="25" width="2" height="3" fill="#1a1a1a"/>
+    <rect x="10" y="24" width="2" height="2" fill="#1a1a1a"/>
+    <rect x="12" y="23" width="2" height="2" fill="#1a1a1a"/>
+    <rect x="14" y="22" width="14" height="2" fill="#1a1a1a"/>
+    <rect x="26" y="10" width="2" height="12" fill="#1a1a1a"/>
+    <rect x="24" y="8" width="2" height="2" fill="#1a1a1a"/>
+    <!-- outline (black) -->
+    <rect x="2" y="26" width="3" height="2" fill="#0c0c0c"/>
+    <rect x="5" y="25" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="7" y="23" width="2" height="3" fill="#0c0c0c"/>
+    <rect x="9" y="22" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="11" y="21" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="13" y="20" width="12" height="2" fill="#0c0c0c"/>
+    <rect x="24" y="8" width="2" height="12" fill="#0c0c0c"/>
+    <rect x="22" y="6" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="20" y="4" width="2" height="2" fill="#0c0c0c"/>
+    <!-- finger tops outline -->
+    <rect x="14" y="4" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="16" y="2" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="18" y="4" width="2" height="2" fill="#0c0c0c"/>
+    <!-- left side outline -->
+    <rect x="2" y="14" width="2" height="12" fill="#0c0c0c"/>
+    <rect x="4" y="12" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="6" y="10" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="8" y="8" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="10" y="6" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="12" y="4" width="2" height="2" fill="#0c0c0c"/>
+    <rect x="14" y="2" width="2" height="2" fill="#0c0c0c"/>
+    <!-- white fill — finger pointing up -->
+    <rect x="14" y="4" width="2" height="16" fill="#ffffff"/>
+    <rect x="16" y="4" width="2" height="16" fill="#ffffff"/>
+    <!-- white fill — hand body -->
+    <rect x="4" y="14" width="20" height="8" fill="#ffffff"/>
+    <rect x="6" y="12" width="16" height="2" fill="#ffffff"/>
+    <rect x="8" y="10" width="12" height="2" fill="#ffffff"/>
+    <!-- finger knuckle detail -->
+    <rect x="15" y="10" width="1" height="1" fill="#cccccc"/>
+    <!-- white finger top -->
+    <rect x="16" y="2" width="2" height="2" fill="#ffffff"/>
+    <rect x="14" y="4" width="4" height="2" fill="#ffffff"/>
+    <!-- 3D depth on right side -->
+    <rect x="24" y="10" width="2" height="10" fill="#888888"/>
+    <rect x="22" y="8" width="2" height="2" fill="#888888"/>
+    <!-- 3D depth on bottom -->
+    <rect x="4" y="22" width="20" height="2" fill="#888888"/>
+    <rect x="3" y="24" width="2" height="2" fill="#888888"/>
+  </svg>`;
 
-// Ring lerps behind with smooth lag
-function lerpRing() {
-  ringX += (dotX - ringX) * 0.12;
-  ringY += (dotY - ringY) * 0.12;
-  cursorRing.style.left = ringX + "px";
-  cursorRing.style.top  = ringY + "px";
-  requestAnimationFrame(lerpRing);
-}
-lerpRing();
+  let mx = -80, my = -80;
+  let cx = -80, cy = -80;
 
-// Hover state on interactive elements
-const hoverTargets = document.querySelectorAll(
-  "a, button, .button, .service-list article, .process li, .contact-link, .hero-visual"
-);
+  document.addEventListener("mousemove", function (e) {
+    mx = e.clientX;
+    my = e.clientY;
+  });
 
-hoverTargets.forEach((el) => {
-  el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
-  el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
-});
+  (function tick() {
+    cx += (mx - cx) * 0.18;
+    cy += (my - cy) * 0.18;
+    cur.style.transform = "translate(" + (cx - 6) + "px, " + (cy - 4) + "px)";
+    requestAnimationFrame(tick);
+  })();
+
+  document.addEventListener("mousedown", function () { cur.classList.add("clicking"); });
+  document.addEventListener("mouseup",   function () { cur.classList.remove("clicking"); });
+})();

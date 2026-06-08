@@ -32,6 +32,10 @@ main {
   padding-top: 74px;
 }
 
+main {
+  padding-top: 74px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -555,9 +559,6 @@ h2 {
   }
 }
 
-/* ─── CUSTOM CURSOR ─────────────────────────────────────── */
-* { cursor: none; }
-
 .cursor-dot {
   position: fixed;
   top: 0; left: 0;
@@ -565,9 +566,10 @@ h2 {
   background: var(--ink);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   transform: translate(-50%, -50%);
-  transition: width 0.15s ease, height 0.15s ease, background 0.15s ease;
+  transition: width 0.15s, height 0.15s;
+  will-change: left, top;
 }
 
 .cursor-ring {
@@ -577,23 +579,46 @@ h2 {
   border: 1.5px solid var(--ink);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 99998;
   transform: translate(-50%, -50%);
-  transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease;
   mix-blend-mode: difference;
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  will-change: left, top;
 }
 
-/* Hover state — ring expands, dot hides */
-body.cursor-hover .cursor-dot {
-  width: 0; height: 0;
-}
-body.cursor-hover .cursor-ring {
-  width: 56px; height: 56px;
-  background: var(--ink);
-  border-color: var(--ink);
+body.cursor-hover .cursor-dot { width: 0; height: 0; }
+body.cursor-hover .cursor-ring { width: 60px; height: 60px; background: var(--ink); }
+
+@media (hover: none), (max-width: 640px) {
+  *, *::before, *::after { cursor: auto !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
 }
 
-@media (max-width: 640px) {
-  * { cursor: auto; }
-  .cursor-dot, .cursor-ring { display: none; }
+/* ── PIXEL HAND CURSOR ─────────────────────────── */
+*, *::before, *::after { cursor: none !important; }
+
+.px-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 48px; height: 48px;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+  transform: translate(0px, 0px);
+  transition: transform 0.08s linear;
+  image-rendering: pixelated;
+}
+
+.px-cursor svg {
+  width: 100%; height: 100%;
+  transition: transform 0.12s ease;
+}
+
+.px-cursor.clicking svg {
+  transform: scale(0.88) rotate(-8deg);
+}
+
+@media (hover: none), (max-width: 640px) {
+  *, *::before, *::after { cursor: auto !important; }
+  .px-cursor { display: none !important; }
 }
