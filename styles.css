@@ -594,31 +594,12 @@ body.cursor-hover .cursor-ring { width: 60px; height: 60px; background: var(--in
   .cursor-dot, .cursor-ring { display: none !important; }
 }
 
-/* ── PIXEL HAND CURSOR ─────────────────────────── */
-*, *::before, *::after { cursor: none !important; }
 
-.px-cursor {
-  position: fixed;
-  top: 0; left: 0;
-  width: 48px; height: 48px;
-  pointer-events: none;
-  z-index: 99999;
-  will-change: transform;
-  transform: translate(0px, 0px);
-  transition: transform 0.08s linear;
-  image-rendering: pixelated;
-}
-
-.px-cursor svg {
-  width: 100%; height: 100%;
-  transition: transform 0.12s ease;
-}
-
-.px-cursor.clicking svg {
-  transform: scale(0.88) rotate(-8deg);
+/* ── HAND CURSOR ─────────────────────────── */
+*, *::before, *::after {
+  cursor: url("assets/hand-cursor.png") 6 4, auto !important;
 }
 
 @media (hover: none), (max-width: 640px) {
   *, *::before, *::after { cursor: auto !important; }
-  .px-cursor { display: none !important; }
 }
