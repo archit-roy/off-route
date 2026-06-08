@@ -252,16 +252,7 @@ h2 {
   transform: rotate(-50deg);
 }
 
-.gradient-frame {
-  position: relative;
-  z-index: 2;
-  width: min(82%, 520px);
-  min-height: 310px;
-  margin: clamp(28px, 5vw, 58px) auto 0;
-  border: 2px solid var(--ink);
-  background: rgba(255, 253, 248, 0.36);
-  backdrop-filter: blur(10px);
-}
+
 
 .hero-panel {
   position: relative;
@@ -544,11 +535,6 @@ h2 {
 
   .hero-visual {
     min-height: 420px;
-  }
-
-  .gradient-frame {
-    width: min(88%, 360px);
-    min-height: 260px;
   }
 
   .ticker {
