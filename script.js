@@ -62,3 +62,38 @@ if (heroVisual) {
     heroVisual.style.setProperty("--tilt-y", "0deg");
   });
 }
+
+// ─── CUSTOM CURSOR ───────────────────────────────────────
+const cursorDot  = document.getElementById("cursorDot");
+const cursorRing = document.getElementById("cursorRing");
+
+let dotX = 0, dotY = 0;
+let ringX = 0, ringY = 0;
+
+// Dot follows instantly
+document.addEventListener("mousemove", (e) => {
+  dotX = e.clientX;
+  dotY = e.clientY;
+  cursorDot.style.left = dotX + "px";
+  cursorDot.style.top  = dotY + "px";
+});
+
+// Ring lerps behind with smooth lag
+function lerpRing() {
+  ringX += (dotX - ringX) * 0.12;
+  ringY += (dotY - ringY) * 0.12;
+  cursorRing.style.left = ringX + "px";
+  cursorRing.style.top  = ringY + "px";
+  requestAnimationFrame(lerpRing);
+}
+lerpRing();
+
+// Hover state on interactive elements
+const hoverTargets = document.querySelectorAll(
+  "a, button, .button, .service-list article, .process li, .contact-link, .hero-visual"
+);
+
+hoverTargets.forEach((el) => {
+  el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
+  el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
+});
